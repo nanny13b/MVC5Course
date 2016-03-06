@@ -225,6 +225,9 @@
     <Compile Include="Models\Product.cs">
       <DependentUpon>Fabrics.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\vwClientOrder.cs">
+      <DependentUpon>Fabrics.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
