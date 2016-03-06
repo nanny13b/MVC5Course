@@ -65,8 +65,14 @@ namespace MVC5Course.Controllers
 
             if (IsActive.HasValue)
             {
+                ///如果說在Action那邊設定的變數不為Nullable的Boolean
+                ///跟p.Active型別不同
+                ///則需要 p.active.value
+                ///如果IsActive跟p.Active型別相同，則P.Active即可
+
                 //data = data
-                //    .Where(p => p.Active.HasValue ? p.Active== IsActive : false);
+                //    .Where(p => p.Active.HasValue ? p.Active == IsActive : false);
+                
                 data = data
                     .Where(p => p.Active.HasValue ? p.Active.Value == IsActive : false);
             }
