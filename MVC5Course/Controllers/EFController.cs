@@ -12,7 +12,9 @@ namespace MVC5Course.Controllers
     {
         FabricsEntities db = new FabricsEntities();
         // GET: EF
-        public ActionResult Index()
+        //public ActionResult Index(bool IsActive = true, string keyword) //給變數預設值
+        //public ActionResult Index(bool IsActive = Nullable, string keyword) 錯誤
+        public ActionResult Index(bool? IsActive, string keyword)
         {
             //這樣每個函式裡都要寫，所以拉到最外面
             //var db = new FabricsEntities();
@@ -26,37 +28,55 @@ namespace MVC5Course.Controllers
             //    Active = true
             //});
 
-            Product p = new Product
-            {
-                ProductName = "New Beetles",
-                Price = 50,
-                Stock = 2,
-                Active = true
-            };
+            //Product p = new Product
+            //{
+            //    ProductName = "New Beetles",
+            //    Price = 50,
+            //    Stock = 2,
+            //    Active = true
+            //};
 
-            //db.Product.Add(p);
-            //db.SaveChanges();
+            ////db.Product.Add(p);
+            ////db.SaveChanges();
 
-            //這樣可以直接取得PKey
-            var pkey = p.ProductId;
+            ////這樣可以直接取得PKey
+            //var pkey = p.ProductId;
 
             //var plist = db.Product.ToList();
             //var plist = db.Product.ToList().Take(10).OrderBy(pd => pd.ProductId);
-            var data1 = db.Product.ToList().OrderByDescending(pd => pd.ProductId).Take(10);
+            //var data1 = db.Product.ToList().OrderByDescending(pd => pd.ProductId).Take(10);
 
             //Entity Frame Work跟ASP.Net 比起來，批次更新校能很差
             //因為他不是像SQL那樣，是**跑Where條件**，一次更新多筆
             //而是跑迴圈，一次更新一筆資料
-            foreach (var item in data1)
+            //foreach (var item in data1)
+            //{
+            //    item.Price = item.Price + 2;
+            //}
+
+            //SaveChanges();
+
+            //var data = db.Product
+            //    .Where(p => p.Active.HasValue ? p.Active == IsActive : false)
+            //    .OrderByDescending(pd => pd.ProductId).Take(10);
+
+            
+            var data = db.Product.OrderByDescending(p => p.ProductId).AsQueryable();
+
+            if (IsActive.HasValue)
             {
-                item.Price = item.Price + 2;
+                //data = data
+                //    .Where(p => p.Active.HasValue ? p.Active== IsActive : false);
+                data = data
+                    .Where(p => p.Active.HasValue ? p.Active.Value == IsActive : false);
+            }
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                data = data.Where(p => p.ProductName.Contains(keyword));
             }
 
-            SaveChanges();
 
-            var data = db.Product.ToList().OrderByDescending(pd => pd.ProductId).Take(10);
-
-            return View(data);
+            return View(data.Take(20));
         }
 
         private void SaveChanges()
@@ -102,6 +122,8 @@ namespace MVC5Course.Controllers
             //}
 
             //2. 一筆筆刪除關聯
+            //記得要加ToList()比較好
+            //否則會無法修改迴圈裡的資料，執行時會掛掉
             foreach (var ol in product.OrderLine.ToList())
             {
                 db.OrderLine.Remove(ol);

@@ -82,6 +82,8 @@ namespace MVC5Course.Controllers
         {
             if (ModelState.IsValid)
             {
+                //這個product不是從資料庫撈出來的 ex: Find
+                //所以從資料庫抓到這筆資料，將他的狀態設定為可修改
                 db.Entry(product).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
