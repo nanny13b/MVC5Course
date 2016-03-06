@@ -60,7 +60,7 @@ namespace MVC5Course.Controllers
             //    .Where(p => p.Active.HasValue ? p.Active == IsActive : false)
             //    .OrderByDescending(pd => pd.ProductId).Take(10);
 
-            
+
             var data = db.Product.OrderByDescending(p => p.ProductId).AsQueryable();
 
             if (IsActive.HasValue)
@@ -72,7 +72,7 @@ namespace MVC5Course.Controllers
 
                 //data = data
                 //    .Where(p => p.Active.HasValue ? p.Active == IsActive : false);
-                
+
                 data = data
                     .Where(p => p.Active.HasValue ? p.Active.Value == IsActive : false);
             }
@@ -90,6 +90,7 @@ namespace MVC5Course.Controllers
             try
             {
                 db.SaveChanges();
+
             }
             catch (DbEntityValidationException ex)
             {
@@ -148,6 +149,60 @@ namespace MVC5Course.Controllers
 
             //return View();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult QueryPlan(int num = 5)
+        {
+            //View 裡面多一欄@item.OrderLine.Count()
+            //< td >
+            //    @item.OrderLine.Count()
+            //</ td >
+
+            ///方法1: 這樣的速度會太慢
+            ///每跑一筆資料，就要撈一次 count一次
+            ///var data = db.Product.ToList();
+
+            ///方法2 事先載回來 - 弱型別
+            //var data = db.Product.Include("OrderLine");
+
+            ///方法3 事先載回來 - 強型別 (最佳)
+            //var data1 = db.Product.Include(p => p.OrderLine).AsEnumerable();
+
+            ///執行原始查詢(T-SQL)
+            ///db.Database.ExecuteSqlCommand() for Insert, Update, Delete
+            ///db.Database.SqlQuery  可以有參數
+            var data = db.Database.SqlQuery<Product>(@"
+                SELECT p.[ProductId]
+                    ,[ProductName]
+                    ,[Price]
+                    ,[Active]
+                    ,[Stock]
+                FROM [dbo].[Product] p 
+                Left Join [dbo].[OrderLine] o on p.ProductId = o.ProductId
+                Where p.ProductId < @P0", num);
+
+
+            return View(data);
+
+
+            ///SampleCode From teacher
+            /// public ActionResult QueryPlan(int num = 10)
+            //{
+            //    var data = db.Product
+            //        .Include(t => t.OrderLine)
+            //        .OrderBy(p => p.ProductId)
+            //        .AsQueryable();
+
+            //    //    var data = db.Database.SqlQuery<Product>(@"
+            //    //                  SELECT * 
+            //    //                  FROM dbo.Product p 
+            //    //                  WHERE p.ProductId < @p0", num);
+
+            //    return View(data);
+            //}
+
+            ///注意SQL Server Profiler (工具 -> SQL Server Profiler) 可監控SQL Server執行效能
+            /
         }
     }
 }
