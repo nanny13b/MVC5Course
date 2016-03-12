@@ -10,8 +10,11 @@
 @section Scripts {
     <script>
         $('#btnJsonTest').bind('click', function () {
-            //查一下為甚麼不行
-            $.getJSON('AR/JsonTest', '', function (data) {
+            //Cindy: 查一下為甚麼不行
+            //Answer: 1. 路徑寫錯  正確版: /AR/JsonTest 錯誤版: AR/JsonTest 路徑錯誤所以一直跳不到
+            //               2. Google Chrome F12 的中斷點下錯地方 應該下在 console.log 之前下在$.getJSON('/AR/JsonTest', '', function (data) {
+            //               3. 跳到後，滑鼠移到data，就可以看到有無資料
+            $.getJSON('/AR/JsonTest', '', function (data) {
                 console.log(data);
             })
         });
