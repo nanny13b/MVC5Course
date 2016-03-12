@@ -116,24 +116,40 @@ namespace MVC5Course.Controllers
         // POST: Products/Edit/5
         // 若要免於過量張貼攻擊，請啟用想要繫結的特定屬性，如需
         // 詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=317598。
+        //public ActionResult Edit([Bind(Include = "ProductId,ProductName,Price,Active,Stock")] Product product)(錯誤版)
+        //Bind: Model.IsValid 預先驗證
+        // Step 1 先找到Action(Edit)
+        // Step 2  找到參數production，
+        // Step 3 看哪些資料要被Bind 再開始比對
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ProductId,ProductName,Price,Active,Stock")] Product product)
+        //public ActionResult Edit([Bind(Include = "ProductId,ProductName,Price,Active,Stock")] Product product)(錯誤版)
+        public ActionResult Edit(int id, FormCollection form) //不會用到form，放這個的原因是為了跟上面那個Action作分別
         {
-            if (ModelState.IsValid)
+            Product p = repo.Find(id);
+
+            //modelbinding 仔細看那邊篇老師的文章
+
+            //if (ModelState.IsValid)
+            if(TryUpdateModel<Product>(p, new string[] { "ProductId,ProductName,Price,Active,Stock" }))  //延遲驗證：Action開始後，這邊才開始做model binding ，可以額外加參數 ex: Include Property。可控性比較高
             {
+                ///這個寫法很不好，可以任意修改Product的資料
+                ///以及沒有Include ProductID
+                /*
                 var db = (FabricsEntities)repo.UnitOfWork.Context;
 
                 //這個product不是從資料庫撈出來的 ex: Find
                 //所以從資料庫抓到這筆資料，將他的狀態設定為可修改
                 db.Entry(product).State = EntityState.Modified;
                 repo.UnitOfWork.Commit();
+                */
+                repo.UnitOfWork.Commit();
 
                 TempData["EditMessage"] = "商品資料更新成功";
 
                 return RedirectToAction("Index");
             }
-            return View(product);
+            return View(p);
         }
 
         // GET: Products/Delete/5
