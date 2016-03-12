@@ -10,7 +10,7 @@ using MVC5Course.Models;
 
 namespace MVC5Course.Controllers
 {
-    public class ProductsController : Controller
+    public class ProductsController : BaseController 
     {
         /// <summary>
         /// 產生 Repository的方法，下載IRepository.EF6.tt，拖曳到Models， 拉到Fabrics.edmx
@@ -60,8 +60,15 @@ namespace MVC5Course.Controllers
             {
                 //db.Product.Add(product);
                 repo.Add(product);
+
+                #region SaveChange vs UnitOfWork.Commit()
                 //db.SaveChanges();
                 //unitofWork可以做 db可以做的事情 所以原本的savechanges就改成呼叫UnitOfWork.Commit()
+                ///public void Commit()
+                ///{
+                ///    Context.SaveChanges();
+                ///} 
+                #endregion
                 repo.UnitOfWork.Commit(); 
                 return RedirectToAction("Index");
             }

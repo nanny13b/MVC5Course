@@ -9,7 +9,7 @@ namespace MVC5Course.Models
 
 
         //over + " " 選要複寫的function + enter
-        //==>
+        //==>會自動產生要override的function
 
         public override IQueryable<Product> All()
         {
