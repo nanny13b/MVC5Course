@@ -14,7 +14,10 @@
     <h3>@TempData["EditMessage"]</h3>
     //資料送出後，如果Reload後，文字就消失了
 }
-<table class="table">
+
+@using (Html.BeginForm())
+{
+    <table class="table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.ProductName)
@@ -23,34 +26,68 @@
             @Html.DisplayNameFor(model => model.Price)
         </th>
         @*<th>
-            @Html.DisplayNameFor(model => model.Active)
-        </th>*@
+                @Html.DisplayNameFor(model => model.Active)
+            </th>*@
         <th>
             @Html.DisplayNameFor(model => model.Stock)
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProductName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Price)
-        </td>
-        @*<td>
-            @Html.DisplayFor(modelItem => item.Active)
-        </td>*@
-        <td>
-            @Html.DisplayFor(modelItem => item.Stock)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ProductId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ProductId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ProductId })
-        </td>
-    </tr>
+    @{
+        var data = Model.ToArray();
+    }
+
+    @for (int i = 0; i < data.Length; i++)
+    {
+        @Html.HiddenFor(modelItem => data[i].ProductId)
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => data[i].ProductName)
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => data[i].Price)
+            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => data[i].Active)
+                </td>*@
+            <td>
+                @Html.EditorFor(modelItem => data[i].Stock)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = data[i].ProductId }) |
+                @Html.ActionLink("Details", "Details", new { id = data[i].ProductId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = data[i].ProductId })
+            </td>
+        </tr>
+    }
+    </table>
+    <button class="btn btn-primary">批次更新</button>
 }
 
-</table>
+    @*
+        @foreach (var item in Model)
+        {
+            @Html.Hidden()
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.EditFor(modelItem => item.Price)
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.Active)
+                    </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Stock)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ProductId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ProductId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ProductId })
+                </td>
+            </tr>
+        }*@
+
+

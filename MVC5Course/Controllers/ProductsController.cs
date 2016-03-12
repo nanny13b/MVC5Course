@@ -23,10 +23,25 @@ namespace MVC5Course.Controllers
         public ActionResult Index()
         {
             // var data = db.Product.OrderByDescending(p => p.ProductId).Take(10);
-            var data = repo.All();
+            var data = repo.All().OrderByDescending(p => p.ProductId).Take(5);
             return View(data);
         }
 
+        [HttpPost]
+        public ActionResult Index(IList<Product> data)
+        {
+            foreach (var item in data)
+            {
+                var p = repo.Find(item.ProductId);
+                p.Price = item.Price;
+                p.Stock = item.Stock;
+            }
+            repo.UnitOfWork.Commit();
+
+            //Cindy: 這樣不行，(如果直接丟View，產品名稱消失了)
+            //return View(data);
+            return RedirectToAction("Index");
+        }
         // GET: Products/Details/5
         public ActionResult Details(int? id)
         {
