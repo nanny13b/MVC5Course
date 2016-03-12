@@ -9,6 +9,11 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+@if (!string.IsNullOrEmpty(Convert.ToString(TempData["EditMessage"])))
+{
+    <h3>@TempData["EditMessage"]</h3>
+    //資料送出後，如果Reload後，文字就消失了
+}
 <table class="table">
     <tr>
         <th>

@@ -106,6 +106,9 @@ namespace MVC5Course.Controllers
                 //所以從資料庫抓到這筆資料，將他的狀態設定為可修改
                 db.Entry(product).State = EntityState.Modified;
                 repo.UnitOfWork.Commit();
+
+                TempData["EditMessage"] = "商品資料更新成功";
+
                 return RedirectToAction("Index");
             }
             return View(product);

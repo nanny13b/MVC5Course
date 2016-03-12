@@ -5,3 +5,16 @@
 
 <h2>Index</h2>
 
+<button id="btnJsonTest">取得JSON Test資料</button>
+
+@section Scripts {
+    <script>
+        $('#btnJsonTest').bind('click', function () {
+            //查一下為甚麼不行
+            $.getJSON('AR/JsonTest', '', function (data) {
+                console.log(data);
+            })
+        });
+    </script>
+}
+
