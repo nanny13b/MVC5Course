@@ -10,14 +10,14 @@ using MVC5Course.Models;
 
 namespace MVC5Course.Controllers
 {
-    public class ProductsController : BaseController 
+    public class ProductsController : BaseController
     {
         /// <summary>
         /// 產生 Repository的方法，下載IRepository.EF6.tt，拖曳到Models， 拉到Fabrics.edmx
         /// 就會自動產生一堆code
         /// </summary>
         //private FabricsEntities db = new FabricsEntities();
-        ProductRepository repo = RepositoryHelper.GetProductRepository();              
+        ProductRepository repo = RepositoryHelper.GetProductRepository();
 
         // GET: Products
         public ActionResult Index()
@@ -28,19 +28,26 @@ namespace MVC5Course.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(IList<Product> data)
+        public ActionResult Index(IList<Product批次更新ViewModel> data)
         {
-            foreach (var item in data)
+            //只要有Binding 就有驗證資料
+            if (ModelState.IsValid)
             {
-                var p = repo.Find(item.ProductId);
-                p.Price = item.Price;
-                p.Stock = item.Stock;
+                foreach (var item in data)
+                {
+                    var p = repo.Find(item.ProductId);
+                    p.Price = item.Price;
+                    p.Stock = item.Stock;
+                }
+                repo.UnitOfWork.Commit();
             }
-            repo.UnitOfWork.Commit();
 
+            //回到首頁
             //Cindy: 這樣不行，(如果直接丟View，產品名稱消失了)
-            //return View(data);
-            return RedirectToAction("Index");
+            //return View(data); (錯誤版)
+            //return RedirectToAction("Index"); (正確版)
+
+            return View(repo.All().OrderByDescending(p => p.ProductId).Take(5));
         }
         // GET: Products/Details/5
         public ActionResult Details(int? id)
@@ -84,7 +91,7 @@ namespace MVC5Course.Controllers
                 ///    Context.SaveChanges();
                 ///} 
                 #endregion
-                repo.UnitOfWork.Commit(); 
+                repo.UnitOfWork.Commit();
                 return RedirectToAction("Index");
             }
 
@@ -98,7 +105,7 @@ namespace MVC5Course.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product =  repo.Find(id.Value);
+            Product product = repo.Find(id.Value);
             if (product == null)
             {
                 return HttpNotFound();
@@ -136,7 +143,7 @@ namespace MVC5Course.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product =  repo.Find(id.Value);
+            Product product = repo.Find(id.Value);
             //db.Product.Remove(product);
             //db.SaveChanges()
             product.IsDeleted = true;
@@ -153,7 +160,7 @@ namespace MVC5Course.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Product product =  repo.Find(id);
+            Product product = repo.Find(id);
             repo.Delete(product);
             //db.Product.Remove(product);
             repo.UnitOfWork.Commit();
