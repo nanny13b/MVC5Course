@@ -12,11 +12,20 @@
     }
 }
 
-<ul>
-    @foreach (var i in Model)
+//SampleCode
+@{
+    foreach (var i in Model)
     {
-        <li>@i</li>
+        @(i+ " ");
+        @i@(" ")
     }
+}
+
+<ul>
+@foreach (var i in Model)
+{
+    <li>@i</li>
+}
 </ul>
 
 
