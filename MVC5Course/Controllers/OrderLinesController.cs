@@ -15,6 +15,8 @@ namespace MVC5Course.Controllers
         private FabricsEntities db = new FabricsEntities();
 
         // GET: OrderLines
+        // 加入 [ChildActionOnly] 限制特定 Action 只能由 View 的 @Html.Action 發出「子要求」
+        [ChildActionOnly]
         public ActionResult Index(int ProductID)
         {
             var orderLine = db.OrderLine.Include(o => o.Order).Include(o => o.Product).Where(p=> p.ProductId == ProductID);
