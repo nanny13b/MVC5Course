@@ -7,6 +7,8 @@ using System.Web.Mvc;
 
 namespace MVC5Course.Controllers
 {
+    //在BaseController 這邊套用，表示所有的Controller都要認證(Login)過後才能登入，就不需要在每頁都寫重覆的驗證Code
+    //[Authorize]  
     public class BaseController : Controller
     {
         ProductRepository repo = RepositoryHelper.GetProductRepository();

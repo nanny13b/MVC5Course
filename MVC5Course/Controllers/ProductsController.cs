@@ -132,6 +132,7 @@ namespace MVC5Course.Controllers
 
             //if (ModelState.IsValid)
             if(TryUpdateModel<Product>(p, new string[] { "ProductId,ProductName,Price,Active,Stock" }))  //延遲驗證：Action開始後，這邊才開始做model binding ，可以額外加參數 ex: Include Property。可控性比較高
+            //if(TryUpdateModel<IProduct>(p)) //1.增加一個介面 可以自訂驗證 也可以控制只要用到哪些欄位 //2.可以用F2修改全站欄位名稱
             {
                 ///這個寫法很不好，可以任意修改Product的資料
                 ///以及沒有Include ProductID
