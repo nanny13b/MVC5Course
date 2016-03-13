@@ -20,7 +20,7 @@ namespace MVC5Course.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult Action(LoginViewModel login)
+        public ActionResult Login(LoginViewModel login)
         {            
             if (CheckLogin(login.Email, login.Password))
             {
@@ -39,13 +39,14 @@ namespace MVC5Course.Controllers
         {
             //修改從資料庫檢查
             return (email == "nanny13b@hotmail.com" && password == "123");
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public ActionResult LogOut()
         {
             FormsAuthentication.SignOut();
-            return View();
+            //return View();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

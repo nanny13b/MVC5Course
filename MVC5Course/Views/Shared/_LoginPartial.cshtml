@@ -1,6 +1,7 @@
 ﻿@*@using Microsoft.AspNet.Identity
     @if (Request.IsAuthenticated)*@
-if(User.Identity.IsAuthenticated)
+
+if(@User.Identity.IsAuthenticated)
 {
     @*using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
@@ -11,10 +12,10 @@ if(User.Identity.IsAuthenticated)
             @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
         </li>*@
         @*<li><a href="javascript:document.getElementById('logoutForm').submit()">登出</a></li>*@
-        <li>@User.Identity.Name</li>@*User之前記得要加@，否則回沒有Intelligence可以用*@
-        <li><a href="/Member/Login">登出</a></li>
+        <li><a href="#">@User.Identity.Name</a></li>@*User之前記得要加@，否則回沒有Intelligence可以用*@
+        <li>@Html.ActionLink("登出", "Logout", "Member")@*<a href="/Member/Login">登出</a>*@</li>
     </ul>
-    }
+    @*}*@
 }
 else
 {
