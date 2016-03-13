@@ -2,12 +2,18 @@
     Layout = "";
     ViewBag.Title = "About";
 }
-@section breadcrumb {
-    <li><a href="#">@ViewBag.Title</a></li>
-}
+@*@section breadcrumb {
+        <li><a href="#">@ViewBag.Title</a></li>
+    }*@
 
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
+
+@Html.ActionLink("Link", "Index", null, new { @class = "btn btn-default",  data_name = "cindy"})
+<a href="@Url.Action("Index")" class="btn btn-default" data-name="cidy"></a>
+@*data-  代表擴充屬性*@
+@*Html.ActionLink 不能用 data-name，只能用data_name 然後C#再幫他轉成data-*@
+
 
 <p>Use this area to provide additional information.</p>
 

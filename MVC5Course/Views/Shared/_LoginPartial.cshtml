@@ -1,15 +1,14 @@
 ﻿
 if(@User.Identity.IsAuthenticated)
 {
-
-    @*<ul class="nav navbar-nav navbar-right">*@
+    <ul class="nav navbar-nav navbar-right">
         <li><a href="#">@User.Identity.Name</a></li>@*User之前記得要加@，否則回沒有Intelligence可以用*@
         <li>@Html.ActionLink("登出", "Logout", "Member")@*<a href="/Member/Login">登出</a>*@</li>
-    @*</ul>*@
+    </ul>
 }
 else
 {
-    @*<ul class="nav navbar-nav navbar-right">*@
+    <ul class="nav navbar-nav navbar-right">
         <li>@Html.ActionLink("登入", "Login", "Member")</li>
-    @*</ul>*@
+    </ul>
 }
