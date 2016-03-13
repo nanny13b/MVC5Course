@@ -1168,6 +1168,7 @@
     <Content Include="Views\Member\Login.cshtml" />
     <Content Include="Views\Home\Error.cshtml" />
     <Content Include="Views\Home\ErrorArgument.cshtml" />
+    <Content Include="Views\Home\RazorTest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
