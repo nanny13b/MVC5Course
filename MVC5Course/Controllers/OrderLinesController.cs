@@ -23,6 +23,13 @@ namespace MVC5Course.Controllers
             return View(orderLine.ToList());
         }
 
+        [ChildActionOnly]
+        public ActionResult Index(List<OrderLine> olist)
+        {
+            //var orderLine = db.OrderLine.Include(o => o.Order).Include(o => o.Product).Where(p => p.ProductId == ProductID);
+            return View(olist);
+        }
+
         // GET: OrderLines/Details/5
         public ActionResult Details(int? id)
         {

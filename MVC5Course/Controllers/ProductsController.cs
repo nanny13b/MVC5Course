@@ -27,7 +27,19 @@ namespace MVC5Course.Controllers
             return View(data);
         }
 
-        [HttpPost]
+        public ActionResult Index(int? PID, string type)
+        {
+            if (PID.HasValue)
+            {
+                ViewBag.SelectedProductID = PID.Value;
+                ViewBag.type = type;
+            }
+            return View(ViewBag);
+        }
+
+        
+
+       [HttpPost]
         public ActionResult Index(IList<Product批次更新ViewModel> data)
         {
             //只要有Binding 就有驗證資料
@@ -193,5 +205,12 @@ namespace MVC5Course.Controllers
             }
             base.Dispose(disposing);
         }
+
+        //public ActionResult GetOrderLines(int pid)
+        //{
+        //    List<OrderLine> olist = repo.Find(pid).OrderLine.ToList();
+        //    ViewBag.OrderLines = olist;
+        //    return View(ViewBag);
+        //}
     }
 }

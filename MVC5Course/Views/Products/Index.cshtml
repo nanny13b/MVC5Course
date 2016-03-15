@@ -4,8 +4,8 @@
     ViewBag.Title = "Index";
 }
 @*@section breadcrumb{
-    <li><a href="#">產品清單</a></li>
-}*@
+        <li><a href="#">產品清單</a></li>
+    }*@
 <h2>產品清單</h2>
 
 <p>
@@ -20,78 +20,99 @@
 @using (Html.BeginForm())
 {
     <table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.ProductName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Price)           
-        </th>
-        @*<th>
-                @Html.DisplayNameFor(model => model.Active)
-            </th>*@
-        <th>
-            @Html.DisplayNameFor(model => model.Stock)
-        </th>
-        <th></th>
-    </tr>
-
-    @{
-        var data = Model.ToArray();
-    }
-
-    @for (int i = 0; i < data.Length; i++)
-    {
-        @Html.HiddenFor(modelItem => data[i].ProductId)
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => data[i].ProductName)
-            </td>
-            <td>
-                @Html.EditorFor(modelItem => data[i].Price)
-                @Html.ValidationMessageFor(modelItem => data[i].Price)
-            </td>
-            @*<td>
-                    @Html.DisplayFor(modelItem => data[i].Active)
-                </td>*@
-            <td>
-                @Html.EditorFor(modelItem => data[i].Stock)
-                @Html.ValidationMessageFor(modelItem => data[i].Stock)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = data[i].ProductId }) |
-                @Html.ActionLink("Details", "Details", new { id = data[i].ProductId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = data[i].ProductId })
-            </td>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Active)
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Stock)
+            </th>
+            <th></th>
         </tr>
-    }
-    </table>
-    <button class="btn btn-primary">批次更新</button>
-}
 
-    @*
-        @foreach (var item in Model)
+        @{            
+            var data = Model.ToArray();
+        }
+
+        @for (int i = 0; i < data.Length; i++)
         {
-            @Html.Hidden()
-            <tr>
+            
+            @Html.HiddenFor(modelItem => data[i].ProductId)
+            if (ViewBag.SelectedProductID != null & ViewBag.SelectedProductID == data[i].ProductId)
+            {
+                ViewBag.SelectedProductItem = data[i];
+            }
+            <tr  @*@(if (ViewBag.SelectedProductID != null & ViewBag.SelectedProductID == data[i].ProductId)
+            { }
+                        )*@>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ProductName)
+                    @Html.DisplayFor(modelItem => data[i].ProductName)
                 </td>
                 <td>
-                    @Html.EditFor(modelItem => item.Price)
+                    @Html.EditorFor(modelItem => data[i].Price)
+                    @Html.ValidationMessageFor(modelItem => data[i].Price)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => data[i].Active)
+                    </td>*@
+                <td>
+                    @Html.EditorFor(modelItem => data[i].Stock)
+                    @Html.ValidationMessageFor(modelItem => data[i].Stock)
                 </td>
                 <td>
-                        @Html.DisplayFor(modelItem => item.Active)
-                    </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Stock)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.ProductId }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.ProductId }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.ProductId })
+                    @Html.ActionLink("Edit", "Edit", new { id = data[i].ProductId }) |
+                    @Html.ActionLink("Details", "Details", new { type = "Details", PID = data[i].ProductId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = data[i].ProductId }) |
+                    @Html.ActionLink("OrderLines", "index",  new { type = "OrderLines", PID = data[i].ProductId })
+
                 </td>
             </tr>
-        }*@
+        }
+    </table>
+    <button class="btn btn-primary">批次更新</button>
+            <hr>
+
+            if (ViewBag.SelectedProductID != null)
+            {
+                if (ViewBag.type = "Details")
+                {
+                    @Html.Action("Details", "Product", ViewData["SelectedProductItem"])
+                }
+                else
+                {
+                    @Html.Action("Index", "OrderLines", new { ProductID = ViewBag.SelectedProductID })
+                    } 
+                }
+            }
+@*
+    @foreach (var item in Model)
+    {
+        @Html.Hidden()
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.EditFor(modelItem => item.Price)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.Active)
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stock)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ProductId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ProductId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ProductId })
+            </td>
+        </tr>
+    }*@
 
 
