@@ -1,6 +1,10 @@
 ﻿@model IEnumerable<MVC5Course.Models.Client>
 @using PagedList
 @using PagedList.Mvc
+@{
+    //var data = Model as PagedList  這樣寫不行 PagedList是命名空間，卻被當成類型使用
+    var data = Model as IPagedList;
+}
 
 @{
     ViewBag.Title = "Index";
@@ -11,8 +15,8 @@
 <p>
     @*@Html.ActionLink("Create New", "Create")*@
     @Ajax.ActionLink("Create New", "Create", new AjaxOptions { UpdateTargetId = "Details" }) 
-
 </p>
+@Html.PagedListPager(list: data, generatePageUrl: p => Url.Action("Index", new { pageno = p }) ,  options:PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing("Main"))
 <table class="table">
     <tr>
         <th>
@@ -131,12 +135,9 @@
 
 </table>
 
-@{
 
-    //var data = Model as PagedList  這樣寫不行 PagedList是命名空間，卻被當成類型使用
-    var data = Model as IPagedList;
-}
-@Html.PagedListPager(list: data, generatePageUrl: p => Url.Action("Index", new { pageno = p}))
+@*@Html.PagedListPager(list: data, generatePageUrl: p => Url.Action("Index", new { pageno = p}))*@
+@Html.PagedListPager(list: data, generatePageUrl: p => Url.Action("Index", new { pageno = p }), options: PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing("Main"))
 
 <div id="Details"></div>
 
