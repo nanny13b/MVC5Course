@@ -1,0 +1,14 @@
+﻿@model Nullable<System.DateTime>
+
+@if (Model.HasValue)
+    {
+        @Html.TextBox("", Model.Value.ToString("yyyy-MM-dd"),  new { @class= "form-control text-box single-line" , type="date"})
+        //Model.Value.ToString("yyyy-MM-ss")
+        @*<input class="form-control text-box single-line" 
+            data-val="true" data-val-date="欄位 DateOfBirth 必須是日期。" 
+            id="DateOfBirth" 
+            name="DateOfBirth" 
+            type="datetime" 
+            value="1975/10/7 星期二 上午 12:00:00" />*@
+
+    }
