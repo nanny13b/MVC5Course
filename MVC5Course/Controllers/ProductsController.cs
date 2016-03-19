@@ -20,24 +20,52 @@ namespace MVC5Course.Controllers
         ProductRepository repo = RepositoryHelper.GetProductRepository();
 
         // GET: Products
-        public ActionResult Index()
-        {
-            // var data = db.Product.OrderByDescending(p => p.ProductId).Take(10);
-            var data = repo.All().OrderByDescending(p => p.ProductId).Take(5);
-            return View(data);
-        }
+        //public ActionResult Index()
+        //{
+        //    // var data = db.Product.OrderByDescending(p => p.ProductId).Take(10);
+        //    var data = repo.All().OrderByDescending(p => p.ProductId).Take(5);
+        //    return View(data);
+        //}
 
-        public ActionResult Index(int? PID, string type)
+
+        //03/19 下拉選單 (dropdownlist vs modelbinding)
+        //1. View 只要一行 Dropdown的名稱
+        //2. 給訂VIewDAta的資料 (ModelBinding)
+        //3. Model (預設值 從 ModelState帶過來)
+        public ActionResult Index(int? PID, string type, bool? IsActive, string keyword)
         {
+            var data = repo.All(true);
+
+            #region 下拉選單
+
+            if (IsActive.HasValue)
+            {
+                data = data.Where(p => p.Active.HasValue && p.Active == IsActive.Value).Take(5);
+            }
+
+            List<SelectListItem> items = new List<SelectListItem>();
+            items.Add(new SelectListItem { Text = "有效", Value = "true" });
+            items.Add(new SelectListItem { Text = "無效", Value = "false" });
+
+            ViewData["IsActive"] = new SelectList(items, "Value", "Text");
+
+            #endregion
+
+            #region 搜尋
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                data = data.Where(p => p.ProductName.Contains(keyword));
+            }
+            #endregion
+
             if (PID.HasValue)
             {
                 ViewBag.SelectedProductID = PID.Value;
                 ViewBag.type = type;
             }
-            return View(ViewBag);
-        }
-
-        
+            //return View(); //不需要再View裡面 傳入ViewBag，因為本來就會帶入ViewBag跟ViewData
+            return View(data);
+        }        
 
        [HttpPost]
         public ActionResult Index(IList<Product批次更新ViewModel> data)

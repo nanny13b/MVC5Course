@@ -8,9 +8,18 @@
     }*@
 <h2>產品清單</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+@*最簡單的做法就是用Form包起來*@
+@using (Html.BeginForm("Index", "Products", FormMethod.Get))
+{
+    <p>
+        @Html.ActionLink("Create New", "Create")
+        @*"--請選擇--  是ddl的預設值 (OptionLabel)"*@
+
+        @Html.DropDownList("IsActive",null, "--請選擇--", new { onchange = "this.form.submit();"})
+        @Html.TextBox("keyword", null, new { onchange = "this.form.submit();" })
+    </p>
+}
+
 @if (!string.IsNullOrEmpty(Convert.ToString(TempData["EditMessage"])))
 {
     <h3>@TempData["EditMessage"]</h3>
@@ -36,21 +45,19 @@
             <th></th>
         </tr>
 
-        @{            
+        @{
             var data = Model.ToArray();
         }
 
         @for (int i = 0; i < data.Length; i++)
         {
-            
+
             @Html.HiddenFor(modelItem => data[i].ProductId)
             if (ViewBag.SelectedProductID != null & ViewBag.SelectedProductID == data[i].ProductId)
             {
                 ViewBag.SelectedProductItem = data[i];
             }
-            <tr  @*@(if (ViewBag.SelectedProductID != null & ViewBag.SelectedProductID == data[i].ProductId)
-            { }
-                        )*@>
+            <tr @if (ViewBag.SelectedProductId != null && ViewBag.SelectedProductId == data[i].ProductId) { @Html.Raw("style='background-color: lightyellow;'")  }>
                 <td>
                     @Html.DisplayFor(modelItem => data[i].ProductName)
                 </td>
@@ -69,25 +76,29 @@
                     @Html.ActionLink("Edit", "Edit", new { id = data[i].ProductId }) |
                     @Html.ActionLink("Details", "Details", new { type = "Details", PID = data[i].ProductId }) |
                     @Html.ActionLink("Delete", "Delete", new { id = data[i].ProductId }) |
-                    @Html.ActionLink("OrderLines", "index",  new { type = "OrderLines", PID = data[i].ProductId })
+                    @Html.ActionLink("OrderLines", "index", new { type = "OrderLines", PID = data[i].ProductId })
 
                 </td>
             </tr>
         }
     </table>
     <button class="btn btn-primary">批次更新</button>
-            <hr>
+    <hr>
 
             if (ViewBag.SelectedProductID != null)
             {
                 if (ViewBag.type = "Details")
                 {
-                    @Html.Action("Details", "Product", ViewData["SelectedProductItem"])
+                    if (ViewData["SelectedProductItem"] != null)
+                    {
+                        @Html.Action("Details", "Product", ViewData["SelectedProductItem"])
+                    }
+
                 }
                 else
                 {
                     @Html.Action("Index", "OrderLines", new { ProductID = ViewBag.SelectedProductID })
-                    } 
+                    }
                 }
             }
 @*
