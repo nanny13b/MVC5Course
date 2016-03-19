@@ -15,7 +15,7 @@
         @Html.ActionLink("Create New", "Create")
         @*"--請選擇--  是ddl的預設值 (OptionLabel)"*@
 
-        @Html.DropDownList("IsActive",null, "--請選擇--", new { onchange = "this.form.submit();"})
+        @Html.DropDownList("IsActive", null, "--請選擇--", new { onchange = "this.form.submit();" })
         @Html.TextBox("keyword", null, new { onchange = "this.form.submit();" })
     </p>
 }
@@ -57,7 +57,7 @@
             {
                 ViewBag.SelectedProductItem = data[i];
             }
-            <tr @if (ViewBag.SelectedProductId != null && ViewBag.SelectedProductId == data[i].ProductId) { @Html.Raw("style='background-color: lightyellow;'")  }>
+            <tr @if (ViewBag.SelectedProductId != null && ViewBag.SelectedProductId == data[i].ProductId) { @Html.Raw("style='background-color: lightyellow;'")   }>
                 <td>
                     @Html.DisplayFor(modelItem => data[i].ProductName)
                 </td>
@@ -65,9 +65,9 @@
                     @Html.EditorFor(modelItem => data[i].Price)
                     @Html.ValidationMessageFor(modelItem => data[i].Price)
                 </td>
-                @*<td>
+                <td>
                         @Html.DisplayFor(modelItem => data[i].Active)
-                    </td>*@
+                    </td>
                 <td>
                     @Html.EditorFor(modelItem => data[i].Stock)
                     @Html.ValidationMessageFor(modelItem => data[i].Stock)
