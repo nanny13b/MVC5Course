@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MVC5Course.Models;
+using PagedList;
 
 namespace MVC5Course.Controllers
 {
@@ -15,10 +16,19 @@ namespace MVC5Course.Controllers
         private FabricsEntities db = new FabricsEntities();
 
         // GET: Clients
-        public ActionResult Index()
+        public ActionResult Index(int pageno=1)
         {
-            var client = db.Client.Take(10).Include(c => c.Occupation);
-            return View(client.ToList());
+            //如果沒有先做OrderBy 會發生錯誤
+            var client = db.Client.Include(c => c.Occupation).OrderBy(p=>p.ClientId);
+
+            //return View(client.ToList());
+            //下面兩種寫法任選ㄧ
+            //var data = client.ToPagedList(pageNumber:pageno, pageSize:10);
+            var data = client.ToPagedList(pageno, 10);
+
+            //實體類別轉抽象類別可以用，但是會失去ㄧ些細節
+            //所以在View要轉型
+            return View(data);
         }
 
         // GET: Clients/Details/5

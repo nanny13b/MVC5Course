@@ -1,4 +1,6 @@
 ﻿@model IEnumerable<MVC5Course.Models.Client>
+@using PagedList
+@using PagedList.Mvc
 
 @{
     ViewBag.Title = "Index";
@@ -128,4 +130,16 @@
 }
 
 </table>
+
+@{
+
+    //var data = Model as PagedList  這樣寫不行 PagedList是命名空間，卻被當成類型使用
+    var data = Model as IPagedList;
+}
+@Html.PagedListPager(list: data, generatePageUrl: p => Url.Action("Index", new { pageno = p}))
+
 <div id="Details"></div>
+
+
+
+
