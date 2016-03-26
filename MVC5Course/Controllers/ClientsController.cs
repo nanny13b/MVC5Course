@@ -26,6 +26,8 @@ namespace MVC5Course.Controllers
             //var data = client.ToPagedList(pageNumber:pageno, pageSize:10);
             var data = client.ToPagedList(pageno, 10);
 
+            ViewBag.pageno = pageno;
+
             //實體類別轉抽象類別可以用，但是會失去ㄧ些細節
             //所以在View要轉型
             return View(data);
@@ -92,12 +94,13 @@ namespace MVC5Course.Controllers
         // 詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ClientId,FirstName,MiddleName,LastName,Gender,DateOfBirth,CreditRating,XCode,OccupationId,TelephoneNumber,Street1,Street2,City,ZipCode,Longitude,Latitude,Notes")] Client client)
+        public ActionResult Edit([Bind(Include = "ClientId,FirstName,MiddleName,LastName,Gender,DateOfBirth,CreditRating,XCode,OccupationId,TelephoneNumber,Street1,Street2,City,ZipCode,Longitude,Latitude,Notes")] Client client, int Pageno = 1)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(client).State = EntityState.Modified;
                 db.SaveChanges();
+                TempData["Msg"] = "更新資料成功\r\n您剛才更新的是編號 " + client.ClientId + " 的資料";
                 return RedirectToAction("Index");
             }
             ViewBag.OccupationId = new SelectList(db.Occupation, "OccupationId", "OccupationName", client.OccupationId);

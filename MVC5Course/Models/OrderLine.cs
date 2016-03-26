@@ -9,9 +9,10 @@
 
 namespace MVC5Course.Models
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
-    
+
     public partial class OrderLine
     {
         public int OrderId { get; set; }
@@ -20,7 +21,9 @@ namespace MVC5Course.Models
         public decimal Qty { get; set; }
         public decimal LineTotal { get; set; }
     
+        [JsonIgnore]
         public virtual Order Order { get; set; }
+        [JsonIgnore]
         public virtual Product Product { get; set; }
     }
 }

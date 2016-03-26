@@ -4,17 +4,39 @@
 @{
     //var data = Model as PagedList  這樣寫不行 PagedList是命名空間，卻被當成類型使用
     var data = Model as IPagedList;
-}
 
-@{
     ViewBag.Title = "Index";
+
+    var CommonAjaxOptions = new AjaxOptions()
+    {
+        UpdateTargetId = "Details",
+        LoadingElementId = "loading",
+        OnSuccess = "ajaxSuccess"
+    };
+}
+@if (TempData["Msg"] != null)
+{
+    <script>
+        //下面被Encode過的，才會正確跳出訊息
+        alert('@Ajax.JavaScriptStringEncode(Convert.ToString(TempData["Msg"]))');
+        //alert('Convert.ToString(TempData["Msg"])'); 原文不動輸出
+    </script>
 }
 
+@section Scripts {
+    <script>
+        function ajaxSuccess() {
+            console.log('Succeed');
+        }
+    </script>
+}
 <h2>Index</h2>
 
 <p>
     @*@Html.ActionLink("Create New", "Create")*@
-    @Ajax.ActionLink("Create New", "Create", new AjaxOptions { UpdateTargetId = "Details" }) 
+    @*@Ajax.ActionLink("Create New", "Create", new AjaxOptions { UpdateTargetId = "Details" })*@ 
+    @Ajax.ActionLink("Create New", "Create", CommonAjaxOptions)
+    <img id="loading" src="~/Content/ajax-loader.gif" style="display: none" />	
 </p>
 @Html.PagedListPager(list: data, generatePageUrl: p => Url.Action("Index", new { pageno = p }) ,  options:PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing("Main"))
 <table class="table">
@@ -125,7 +147,13 @@
             @Html.ActionLink("Details", "Details", new { id=item.ClientId }) |
             @Html.ActionLink("Delete", "Delete", new { id=item.ClientId })
             *@
-            @Ajax.ActionLink("Edit", "Edit", new { id = item.ClientId }, new AjaxOptions { UpdateTargetId = "Details" }) |
+            @*@Ajax.ActionLink("Edit", "Edit", new { id = item.ClientId }, new AjaxOptions { UpdateTargetId = "Details" }) |*@
+            @Ajax.ActionLink("Edit", "Edit", new
+        {
+            id = item.ClientId,
+            pageno = (int)ViewBag.pageno
+        },
+                  CommonAjaxOptions)|
             @Ajax.ActionLink("Details", "Details", new { id = item.ClientId }, new AjaxOptions { UpdateTargetId = "Details" }) |
             @Ajax.ActionLink("Delete", "Delete", new { id = item.ClientId }, new AjaxOptions { UpdateTargetId = "Details" }) |
 
